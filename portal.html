@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WEB BELAJAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff8fb; --surface:#ffffff; --surface-2:#ffe3ef;
+    --text:#3a1930; --muted:#a9738f; --accent:#ff4d94; --accent-2:#ff8fc2; --accent-dim:#ffd6e8;
+    --border:#ffd6e8; --danger:#e0335c;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:inherit;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);}
+  body{font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  h1,h2,.brand{font-family:'Fraunces',Georgia,serif;}
+  a{color:var(--accent);}
+  .hidden{display:none !important;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important;transition-duration:0.001ms !important;} }
+
+  @keyframes viewIn{ from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+  .view-anim{animation:viewIn .38s cubic-bezier(.2,.7,.3,1) both;}
+
+  .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:rippleAnim .55s ease-out;pointer-events:none;}
+  @keyframes rippleAnim{ to{transform:scale(2.6);opacity:0;} }
+
+  /* Auth split screen */
+  .auth{min-height:100%;display:flex;flex-wrap:wrap;}
+  .auth-brand{flex:1 1 320px;background:linear-gradient(165deg,var(--accent) 0%,var(--accent-2) 55%,#ffd1e6 100%);padding:56px 48px;display:flex;flex-direction:column;justify-content:space-between;min-height:340px;color:#fff;}
+  .auth-brand .mark{width:38px;height:38px;border-radius:9px;background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Fraunces',serif;box-shadow:0 6px 18px rgba(214,26,101,.25);}
+  .auth-brand h1{font-size:clamp(2rem,4vw,2.8rem);font-weight:600;line-height:1.08;margin:28px 0 12px;max-width:9ch;color:#fff;}
+  .auth-brand p{color:rgba(255,255,255,.9);max-width:32ch;margin:0;}
+  .auth-form-wrap{flex:1 1 380px;display:flex;align-items:center;justify-content:center;padding:48px 32px;}
+  form{width:100%;max-width:360px;}
+  .field{margin-bottom:16px;}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  input{width:100%;padding:11px 13px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font:inherit;transition:border-color .18s ease,box-shadow .18s ease,transform .12s ease;}
+  input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-dim);}
+  input:focus{transform:translateY(-1px);}
+  .btn{position:relative;overflow:hidden;width:100%;padding:12px 14px;border-radius:8px;border:1px solid transparent;background:var(--accent);color:#fff;font:inherit;font-weight:600;cursor:pointer;margin-top:6px;box-shadow:0 8px 18px rgba(255,77,148,.28);transition:transform .12s ease,box-shadow .12s ease,background .18s ease;}
+  .btn:hover{background:#ff2f85;box-shadow:0 10px 22px rgba(255,77,148,.38);}
+  .btn:active{transform:scale(.96);box-shadow:0 4px 10px rgba(255,77,148,.3);}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .btn-ghost{background:transparent;border-color:var(--border);color:var(--text);box-shadow:none;}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:transparent;}
+  .switch{margin-top:18px;font-size:14px;color:var(--muted);text-align:center;}
+  .switch button{background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;font-weight:600;padding:0;transition:transform .12s ease;}
+  .switch button:active{transform:scale(.94);}
+  .error{color:var(--danger);font-size:13px;margin:-6px 0 14px;min-height:16px;}
+  .form-title{margin:0 0 4px;font-size:1.5rem;font-weight:600;}
+  .form-sub{color:var(--muted);font-size:14px;margin:0 0 24px;}
+
+  /* App shell */
+  .app-shell{min-height:100%;display:flex;flex-direction:column;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);position:sticky;top:env(safe-area-inset-top,0px);background:rgba(255,248,251,.92);backdrop-filter:blur(6px);z-index:5;}
+  .nav-left{display:flex;align-items:center;gap:10px;}
+  .nav-left .mark{width:28px;height:28px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Fraunces',serif;font-size:14px;}
+  .nav-left span{font-weight:600;}
+  .nav-links{display:flex;gap:6px;align-items:center;}
+  .nav-links button{position:relative;overflow:hidden;background:none;border:none;color:var(--muted);font:inherit;font-size:14px;padding:8px 14px;border-radius:7px;cursor:pointer;transition:background .16s ease,color .16s ease,transform .12s ease;}
+  .nav-links button.active{color:var(--accent);background:var(--surface-2);}
+  .nav-links button:hover{color:var(--accent);}
+  .nav-links button:active{transform:scale(.94);}
+  .nav-links .logout{color:var(--danger);}
+  main{flex:1;padding:64px 32px;max-width:760px;margin:0 auto;width:100%;}
+  .hero-label{color:var(--accent);font-size:14px;margin:0 0 10px;font-weight:600;}
+  main h2{font-size:clamp(2.4rem,6vw,4rem);margin:0 0 18px;line-height:1;font-weight:600;}
+  main .lead{color:var(--muted);font-size:1.05rem;max-width:56ch;margin:0 0 28px;}
+  .user-chip{display:inline-flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);padding:8px 14px;border-radius:999px;font-size:14px;color:var(--accent);font-weight:600;}
+  .user-chip::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .about-block{margin-top:8px;}
+  .about-block h3{font-size:1rem;color:var(--accent);margin:28px 0 6px;}
+  .about-block p{color:var(--muted);margin:0;max-width:60ch;}
+  footer{padding:20px 32px;text-align:center;color:var(--muted);font-size:12px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="view-login" class="auth">
+  <div class="auth-brand">
+    <div class="mark">W</div>
+    <div>
+      <h1>Masuk ke WEB BELAJAR</h1>
+      <p>Ruang belajar bersama yang interaktif — tempat teman sekelas masuk, berdiskusi, dan belajar dari satu titik yang sama.</p>
+    </div>
+  </div>
+  <div class="auth-form-wrap">
+    <form id="form-login">
+      <p class="form-title">Selamat datang kembali</p>
+      <p class="form-sub">Masukkan akun untuk melanjutkan.</p>
+      <div class="field">
+        <label for="li-user">Nama pengguna</label>
+        <input id="li-user" required autocomplete="username" placeholder="cth. dinda">
+      </div>
+      <div class="field">
+        <label for="li-pass">Kata sandi</label>
+        <input id="li-pass" type="password" required autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <p class="error" id="login-error" role="alert"></p>
+      <button class="btn" type="submit">Masuk</button>
+      <p class="switch">Belum punya akun? <button type="button" id="go-signup">Daftar</button></p>
+    </form>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section id="view-signup" class="auth hidden">
+  <div class="auth-brand">
+    <div class="mark">W</div>
+    <div>
+      <h1>Buat akun baru</h1>
+      <p>Isi data singkat berikut. Setelah akun dibuat, kamu akan diarahkan kembali ke halaman masuk.</p>
+    </div>
+  </div>
+  <div class="auth-form-wrap">
+    <form id="form-signup">
+      <p class="form-title">Daftar akun</p>
+      <p class="form-sub">Gratis, hanya untuk keperluan demo.</p>
+      <div class="field">
+        <label for="su-name">Nama lengkap</label>
+        <input id="su-name" required placeholder="Nama kamu">
+      </div>
+      <div class="field">
+        <label for="su-user">Nama pengguna</label>
+        <input id="su-user" required placeholder="Buat nama pengguna">
+      </div>
+      <div class="field">
+        <label for="su-pass">Kata sandi</label>
+        <input id="su-pass" type="password" required placeholder="Minimal 4 karakter">
+      </div>
+      <p class="error" id="signup-error" role="alert"></p>
+      <button class="btn" type="submit">Daftar</button>
+      <p class="switch">Sudah punya akun? <button type="button" id="go-login">Masuk</button></p>
+    </form>
+  </div>
+</section>
+
+<!-- APP SHELL: HOME + ABOUT -->
+<div id="view-app" class="app-shell hidden">
+  <nav>
+    <div class="nav-left">
+      <div class="mark">W</div>
+      <span>WEB BELAJAR</span>
+    </div>
+    <div class="nav-links">
+      <button id="nav-home" class="active">Beranda</button>
+      <button id="nav-about">Tentang</button>
+      <button id="nav-logout" class="logout">Keluar</button>
+    </div>
+  </nav>
+
+  <main id="page-home">
+    <p class="hero-label">Beranda</p>
+    <h2>Halo, <span id="home-name">Pengguna</span>.</h2>
+    <p class="lead">WEB BELAJAR adalah ruang untuk belajar bersama secara interaktif — kumpul, diskusi, dan pantau progres belajar dari satu tempat.</p>
+    <span class="user-chip" id="home-chip">● sedang masuk</span>
+  </main>
+
+  <main id="page-about" class="hidden">
+    <p class="hero-label">Tentang</p>
+    <h2>Tentang WEB BELAJAR</h2>
+    <p class="lead">WEB BELAJAR adalah prototipe ruang belajar bersama secara interaktif, dibuat untuk tugas mata kuliah Multimedia Interaktif dengan fokus utama pada UI dan UX.</p>
+    <div class="about-block">
+      <h3>Tujuan</h3>
+      <p>Menjadi titik kumpul yang sederhana bagi teman sekelas untuk masuk, belajar bersama, dan berbagi progres — dari masuk, membuat akun, menjelajah beranda, hingga keluar dengan mulus.</p>
+    </div>
+    <div class="about-block">
+      <h3>Fokus desain</h3>
+      <p>Tampilan pink-putih yang hangat dan ramah, dengan animasi interaktif di setiap tombol agar suasana belajar terasa hidup dan menyenangkan.</p>
+    </div>
+  </main>
+
+  <footer>Dibuat untuk tugas Multimedia Interaktif · WEB BELAJAR</footer>
+</div>
+
+<script>
+(function(){
+  var loginView = document.getElementById('view-login');
+  var signupView = document.getElementById('view-signup');
+  var appView = document.getElementById('view-app');
+  var pageHome = document.getElementById('page-home');
+  var pageAbout = document.getElementById('page-about');
+  var navHome = document.getElementById('nav-home');
+  var navAbout = document.getElementById('nav-about');
+  var navLogout = document.getElementById('nav-logout');
+
+  function show(el){ el.classList.remove('hidden'); animateIn(el); }
+  function hide(el){ el.classList.add('hidden'); }
+  function animateIn(el){
+    el.classList.remove('view-anim');
+    void el.offsetWidth; // restart animation
+    el.classList.add('view-anim');
+  }
+
+  function goLogin(){
+    hide(signupView); hide(appView); show(loginView);
+    document.getElementById('li-user').focus();
+  }
+  function goSignup(){
+    hide(loginView); hide(appView); show(signupView);
+    document.getElementById('su-name').focus();
+  }
+  function goApp(username){
+    hide(loginView); hide(signupView); show(appView);
+    document.getElementById('home-name').textContent = username || 'Pengguna';
+    showHome();
+  }
+  function showHome(){
+    show(pageHome); hide(pageAbout);
+    navHome.classList.add('active'); navAbout.classList.remove('active');
+  }
+  function showAbout(){
+    hide(pageHome); show(pageAbout);
+    navAbout.classList.add('active'); navHome.classList.remove('active');
+  }
+
+  // Ripple effect on every button press
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.btn, .nav-links button');
+    if(!btn) return;
+    var rect = btn.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height);
+    var ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+    var prevPos = getComputedStyle(btn).position;
+    if(prevPos === 'static') btn.style.position = 'relative';
+    btn.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 550);
+  });
+
+  document.getElementById('go-signup').addEventListener('click', goSignup);
+  document.getElementById('go-login').addEventListener('click', goLogin);
+  navHome.addEventListener('click', showHome);
+  navAbout.addEventListener('click', showAbout);
+  navLogout.addEventListener('click', function(){
+    document.getElementById('li-user').value = '';
+    document.getElementById('li-pass').value = '';
+    goLogin();
+  });
+
+  document.getElementById('form-login').addEventListener('submit', function(e){
+    e.preventDefault();
+    var user = document.getElementById('li-user').value.trim();
+    var pass = document.getElementById('li-pass').value;
+    var err = document.getElementById('login-error');
+    if(!user || !pass){ err.textContent = 'Nama pengguna dan kata sandi wajib diisi.'; return; }
+    err.textContent = '';
+    goApp(user);
+  });
+
+  document.getElementById('form-signup').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('su-name').value.trim();
+    var user = document.getElementById('su-user').value.trim();
+    var pass = document.getElementById('su-pass').value;
+    var err = document.getElementById('signup-error');
+    if(!name || !user || !pass){ err.textContent = 'Semua kolom wajib diisi.'; return; }
+    if(pass.length < 4){ err.textContent = 'Kata sandi minimal 4 karakter.'; return; }
+    err.textContent = '';
+    document.getElementById('su-name').value = '';
+    document.getElementById('su-user').value = '';
+    document.getElementById('su-pass').value = '';
+    document.getElementById('li-user').value = user;
+    goLogin();
+  });
+})();
+</script>
+</body>
+</html>
